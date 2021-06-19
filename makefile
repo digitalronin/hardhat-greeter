@@ -29,3 +29,6 @@ guard-%:
 cmd-exists-%:
 	@hash $(*) > /dev/null 2>&1 || \
 	  (echo "ERROR: '$(*)' must be installed and available on your PATH."; exit 1)
+
+set-greeting: artifacts/contracts/Greeter.sol/Greeter.json cmd-exists-npx
+	npx hardhat run scripts/set-greeting.js --network localhost
