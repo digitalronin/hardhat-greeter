@@ -35,6 +35,22 @@ task("get-greeting", "Outputs the Greeter.greeting string")
     const message =  await greeter.greet();
     console.log({ message });
   });
+
+task("set-greeting", "Outputs the Greeter.greeting string")
+  .addParam("string", "The new greeting string")
+  .setAction(async ({ string }) => {
+    const json = fs.readFileSync('./artifacts/contracts/Greeter.sol/Greeter.json', 'utf8');
+    const greeterAddress = process.env.CONTRACT_ADDRESS;
+    const Greeter = JSON.parse(json);
+    const [signer] = await ethers.getSigners();
+    const contract = new ethers.Contract(greeterAddress, Greeter.abi, signer);
+
+    const transaction = await contract.setGreeting(string);
+    await transaction.wait();
+
+    console.log(`Set greeting to ${string}`);
+  });
+
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
