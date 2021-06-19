@@ -2,6 +2,7 @@ require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-web3");
 
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
+const ROPSTEN_PRIVATE_KEY = process.env.ROPSTEN_PRIVATE_KEY;
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -32,6 +33,7 @@ module.exports = {
   networks: {
     ropsten: {
       url: `https://ropsten.infura.io/v3/${INFURA_API_KEY}`,
+      accounts: [`0x${ROPSTEN_PRIVATE_KEY}`]
     }
   }
 };
