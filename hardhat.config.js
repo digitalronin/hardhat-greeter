@@ -1,6 +1,8 @@
 require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-web3");
 
+const fs = require("fs");
+
 const INFURA_API_KEY = process.env.INFURA_API_KEY;
 const ROPSTEN_PRIVATE_KEY = process.env.ROPSTEN_PRIVATE_KEY;
 
@@ -21,6 +23,17 @@ task("balance", "Prints an account's balance")
     const balance = await web3.eth.getBalance(account);
 
     console.log(web3.utils.fromWei(balance, "ether"), "ETH");
+  });
+
+task("get-greeting", "Outputs the Greeter.greeting string")
+  .setAction(async ({ string }) => {
+    const json = fs.readFileSync('./artifacts/contracts/Greeter.sol/Greeter.json', 'utf8');
+    const Greeter = JSON.parse(json);
+    const greeterAddress = process.env.CONTRACT_ADDRESS;
+    const greeter = await ethers.getContractAt(Greeter.abi, greeterAddress);
+
+    const message =  await greeter.greet();
+    console.log({ message });
   });
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
